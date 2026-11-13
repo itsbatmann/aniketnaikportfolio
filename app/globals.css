@@ -767,32 +767,126 @@ body {
   opacity: 0.5;
 }
 
-/* ── About (placeholder) ──────────────────────────────────────────────── */
+/* ── About ────────────────────────────────────────────── */
 
+/* The about page runs the chalk ground with a single hot accent, the way the
+   reference does. Amber is the site's signal colour but it has no contrast
+   against chalk at text size, so the accent here is a warm red that sits in
+   the same family. */
 .about {
-  min-height: 70svh;
+  --flare: #e8352b;
+  position: relative;
+  min-height: 100svh;
   display: grid;
-  align-content: center;
-  gap: clamp(1rem, 3vw, 2rem);
-  padding: clamp(6rem, 13vw, 10rem) var(--gutter) clamp(4rem, 9vw, 7rem);
+  grid-template-columns: minmax(0, 1fr) clamp(18rem, 36vw, 34rem);
+  align-items: end;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  padding: clamp(5.5rem, 11vw, 8.5rem) var(--gutter) 0;
+  overflow: clip;
 }
 
-.about-title {
+.about-text {
+  display: grid;
+  gap: clamp(0.9rem, 2vw, 1.6rem);
+  padding-bottom: clamp(2.5rem, 6vw, 5rem);
+  /* Keeps the copy above the portrait where they overlap on mid widths. */
+  position: relative;
+  z-index: 1;
+}
+
+.about-lockup {
   margin: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-poster), "Haettenschweiler", "Arial Narrow Bold",
+    var(--font-micro);
   font-weight: 400;
-  font-size: clamp(2.75rem, 11vw, 9rem);
-  line-height: 0.9;
-  letter-spacing: -0.015em;
+  font-size: clamp(3.25rem, 10vw, 8.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.005em;
+  text-transform: none;
 }
 
-.about-line {
+.about-first {
+  color: var(--flare);
+}
+
+/* The surname is set in the same poster face but tracked open, so the two
+   halves read as one lockup with two voices — as in the reference. */
+.about-last {
+  letter-spacing: 0.04em;
+}
+
+.about-meta {
   margin: 0;
-  max-width: 46ch;
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 1.6vw, 1.375rem);
-  line-height: 1.5;
-  opacity: 0.7;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5em;
+  font-size: clamp(0.75rem, 1.15vw, 1rem);
+  letter-spacing: 0.06em;
+  text-transform: none;
+}
+
+.about-meta i {
+  font-style: normal;
+  opacity: 0.45;
+  margin-right: 0.5em;
+}
+
+.about-body {
+  margin: 0;
+  max-width: 58ch;
+  font-family: var(--font-micro);
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.about-body em {
+  font-style: normal;
+}
+
+.is-flare {
+  color: var(--flare);
+}
+
+.about-signoff {
+  margin: clamp(0.5rem, 2vw, 1.5rem) 0 0;
+  font-family: var(--font-hand), "Segoe Script", cursive;
+  font-size: clamp(1.6rem, 3.4vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Portrait — cropped flush to the bottom of the section, desaturated so the
+   only colour on the page is the accent. */
+.about-portrait {
+  margin: 0;
+  align-self: end;
+  justify-self: end;
+  /* Bleeds past the gutter to the viewport edge, as in the reference. */
+  width: calc(100% + var(--gutter));
+  margin-right: calc(var(--gutter) * -1);
+  aspect-ratio: 3 / 4;
+  max-height: 78svh;
+  /* The tonal block that shows through before (or instead of) the photo. */
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ink) 9%, transparent),
+    color-mix(in srgb, var(--ink) 2%, transparent)
+  );
+}
+
+.about-portrait-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-image: var(--portrait);
+  background-size: cover;
+  background-position: 50% 12%;
+  background-repeat: no-repeat;
+  filter: grayscale(1) contrast(1.08);
 }
 
 /* ── Narrow ───────────────────────────────────────────────────────────── */
@@ -820,6 +914,26 @@ body {
 
   .row-arrow {
     display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .about {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    padding-bottom: 0;
+  }
+
+  .about-text {
+    padding-bottom: clamp(2rem, 6vw, 3rem);
+  }
+
+  .about-portrait {
+    justify-self: stretch;
+    width: calc(100% + var(--gutter) * 2);
+    margin: 0 calc(var(--gutter) * -1);
+    aspect-ratio: 4 / 5;
+    max-height: 60svh;
   }
 }
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda } from "next/font/google";
+import { Anton, Caveat, Bodoni_Moda } from "next/font/google";
 import "./globals.css";
 import SiteNav from "@/components/SiteNav";
 import ScrollReset from "@/components/ScrollReset";
@@ -12,6 +12,23 @@ const display = Bodoni_Moda({
   subsets: ["latin"],
   weight: ["400", "500"],
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+// The about lockup is a different register from the hero: a heavy condensed
+// grotesk, set tight, with the first name carrying the accent colour.
+const poster = Anton({
+  variable: "--font-poster",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
+// The handwritten sign-off under the bio.
+const hand = Caveat({
+  variable: "--font-hand",
+  subsets: ["latin"],
+  weight: ["400", "600"],
   display: "swap",
 });
 
@@ -30,7 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${display.variable} js-ready h-full antialiased`}
+      className={`${display.variable} ${poster.variable} ${hand.variable} js-ready h-full antialiased`}
     >
       <body className="min-h-full">
         {typekitId ? (
