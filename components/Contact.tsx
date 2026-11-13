@@ -65,10 +65,10 @@ export default function Contact() {
       data-ground="ink"
       data-nav-ink="light"
     >
-      <p className="eyebrow" data-micro data-anim>
+      <h2 className="eyebrow" data-micro data-anim>
         <span className="eyebrow-rule" aria-hidden="true" />
         Hello
-      </p>
+      </h2>
 
       <p className="contact-headline" data-anim>
         Have something worth building? I take on a small number of projects at

@@ -3,7 +3,7 @@ import { Anton, Caveat, Bodoni_Moda } from "next/font/google";
 import "./globals.css";
 import SiteNav from "@/components/SiteNav";
 import ScrollReset from "@/components/ScrollReset";
-import { SITE_URL } from "@/lib/site";
+import { SITE, SITE_URL, absoluteUrl } from "@/lib/site";
 
 // The display face: a Didone with the thick/thin contrast of the reference
 // lockup. `optical sizing` is on by default for variable fonts, which is what
@@ -42,10 +42,78 @@ export const metadata: Metadata = {
   // Resolves every relative URL in page metadata (canonicals, OG images)
   // against the canonical origin — the same one the sitemap uses.
   metadataBase: new URL(SITE_URL),
-  alternates: { canonical: "/" },
-  title: "Aniket Naik — Portfolio",
-  description:
-    "Portfolio of Aniket Naik, UI/UX designer and full-stack web developer.",
+  // NOTE: no `alternates.canonical` here. A canonical set on the root layout
+  // is inherited by every child route, which would point /about and all four
+  // case pages at the home page and ask Google to drop them from the index.
+  // Each page declares its own.
+  title: {
+    default: `${SITE.name} — ${SITE.role}`,
+    // Child pages set a bare title; this appends the site name for them.
+    template: `%s — ${SITE.shortName}`,
+  },
+  description: SITE.description,
+  applicationName: SITE.shortName,
+  authors: [{ name: SITE.name, url: SITE_URL }],
+  creator: SITE.name,
+  publisher: SITE.name,
+  openGraph: {
+    type: "website",
+    siteName: SITE.shortName,
+    locale: "en_US",
+    url: SITE_URL,
+    title: `${SITE.name} — ${SITE.role}`,
+    description: SITE.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.name} — ${SITE.role}`,
+    description: SITE.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      // Lets Google show a full-length snippet, a large thumbnail and video
+      // previews instead of the conservative defaults it falls back to.
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
+};
+
+/**
+ * Identity graph for the site. `ProfilePage` + `Person` is the pairing Google
+ * documents for a personal site, and it is what gives the name query something
+ * structured to attach to.
+ */
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  mainEntity: {
+    "@type": "Person",
+    "@id": absoluteUrl("/#person"),
+    name: SITE.name,
+    url: SITE_URL,
+    jobTitle: SITE.role,
+    description: SITE.description,
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: SITE.locality,
+    },
+    knowsAbout: [
+      "UI design",
+      "UX design",
+      "Design systems",
+      "Front-end development",
+      "Next.js",
+      "React",
+      "GSAP",
+    ],
+    sameAs: [...SITE.socials],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -66,6 +134,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <noscript>
           <style>{`[data-anim]{visibility:visible!important}`}</style>
         </noscript>
+        {/* Rendered on the server so it is present in the HTML a crawler
+            receives without executing any JavaScript. */}
+        <script
+          type="application/ld+json"
+          // The payload is a literal defined above — no user input reaches it.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
+        />
         <ScrollReset />
         <SiteNav />
         {children}

@@ -142,6 +142,13 @@ export default function Hero() {
 
       <div className="stack">
         <h1 className="lockup">
+          {/* The lockup reads "Aniket" by design. An h1 of one first name
+              tells a crawler nothing, so the full name and role are carried
+              here and hidden visually — same words a sighted visitor gets
+              from the lockup plus the bio below it. */}
+          <span className="sr-only">
+            Aniket Naik — UI/UX designer and full-stack web developer
+          </span>
           <span className="crescent" aria-hidden="true" data-anim>
             <svg viewBox="0 0 100 100" focusable="false">
               <path
@@ -150,7 +157,7 @@ export default function Hero() {
               />
             </svg>
           </span>
-          <span className="wordmark" data-anim>
+          <span className="wordmark" aria-hidden="true" data-anim>
             Aniket
           </span>
           <span className="tally" data-micro data-anim>

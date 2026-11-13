@@ -59,10 +59,10 @@ export default function Statement() {
       aria-label="Approach"
       data-ground="chalk"
     >
-      <p className="eyebrow" data-micro data-anim>
+      <h2 className="eyebrow" data-micro data-anim>
         <span className="eyebrow-rule" aria-hidden="true" />
         Approach
-      </p>
+      </h2>
 
       <p className="statement-copy" data-anim>
         I design and build the whole thing — the interface, the motion and the

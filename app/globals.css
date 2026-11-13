@@ -451,6 +451,8 @@ body {
 }
 
 .row-title {
+  /* An h3 for document outline; the list layout wants no UA margin. */
+  margin: 0;
   font-family: var(--font-display);
   font-weight: 400;
   font-size: clamp(2rem, 5.4vw, 4.5rem);

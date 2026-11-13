@@ -110,10 +110,10 @@ export default function WorkIndex() {
       data-ground="chalk"
     >
       <div className="section-head">
-        <p className="eyebrow" data-micro data-anim>
+        <h2 className="eyebrow" data-micro data-anim>
           <span className="eyebrow-rule" aria-hidden="true" />
           Selected work
-        </p>
+        </h2>
         <p className="section-note" data-micro data-anim>
           Four builds — two front-end studies, one full-stack product, one in
           progress.
@@ -140,7 +140,7 @@ export default function WorkIndex() {
               <span className="row-no">{project.no}</span>
 
               <span className="row-main">
-                <span className="row-title">{project.title}</span>
+                <h3 className="row-title">{project.title}</h3>
                 <span className="row-line">{project.line}</span>
               </span>
 

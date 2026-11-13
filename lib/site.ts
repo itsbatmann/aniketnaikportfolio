@@ -14,3 +14,35 @@ export const SITE_URL = (
 /** Absolute URL for a site-root-relative path. */
 export const absoluteUrl = (path = "/") =>
   `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+
+/**
+ * One source of truth for the identity the site claims, shared by the metadata
+ * in every route and by the JSON-LD in the root layout. Search engines treat a
+ * name/role that differs between the two as a weaker signal, so they are not
+ * written out twice.
+ */
+export const SITE = {
+  name: "Aniket Naik",
+  /** Used for `og:site_name` and the `title.template` suffix. */
+  shortName: "Aniket Naik",
+  role: "UI/UX designer and full-stack web developer",
+  locality: "India",
+  /**
+   * The home page description. Written to read as a sentence a human would
+   * click, not a keyword list — but it still carries the two terms someone
+   * would actually search ("UI/UX designer", "full-stack web developer")
+   * alongside the name, which is the query this site can realistically win.
+   */
+  description:
+    "Aniket Naik is a UI/UX designer and full-stack web developer in India, building interfaces, motion and the code underneath them with Next.js, React and GSAP.",
+  /**
+   * Profiles that corroborate the same person. `sameAs` is how a search engine
+   * links this site to an existing entity, so these must be the real accounts
+   * — the placeholders below are not yet.
+   */
+  socials: [
+    "https://instagram.com/",
+    "https://linkedin.com/",
+    "https://github.com/",
+  ],
+} as const;
