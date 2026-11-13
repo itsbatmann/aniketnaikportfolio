@@ -3,6 +3,7 @@ import { Anton, Caveat, Bodoni_Moda } from "next/font/google";
 import "./globals.css";
 import SiteNav from "@/components/SiteNav";
 import ScrollReset from "@/components/ScrollReset";
+import { SITE_URL } from "@/lib/site";
 
 // The display face: a Didone with the thick/thin contrast of the reference
 // lockup. `optical sizing` is on by default for variable fonts, which is what
@@ -38,6 +39,10 @@ const hand = Caveat({
 const typekitId = process.env.NEXT_PUBLIC_TYPEKIT_ID;
 
 export const metadata: Metadata = {
+  // Resolves every relative URL in page metadata (canonicals, OG images)
+  // against the canonical origin — the same one the sitemap uses.
+  metadataBase: new URL(SITE_URL),
+  alternates: { canonical: "/" },
   title: "Aniket Naik — Portfolio",
   description:
     "Portfolio of Aniket Naik, UI/UX designer and full-stack web developer.",
