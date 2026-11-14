@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,92 +13,82 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
 export default function WorkIndex() {
   const root = useRef<HTMLElement>(null);
-  const preview = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState<number | null>(null);
 
   useGSAP(
     () => {
       const q = gsap.utils.selector(root);
-      const rows = q(".work-row");
-      const links = q(".work-link");
+      const [strip] = q(".posters");
+      const posters = q(".poster");
+      // The card and its case link travel together, or the card slides over
+      // the link on the way in.
+      const cells = q(".poster-cell");
       const head = q("[data-micro]");
+      const [lede] = q(".work-lede");
 
-      // autoAlpha goes on the link, not the row: an inline opacity on the row
-      // would beat the CSS rule that dims the rows you are not hovering.
-      gsap.set([...links, ...head], { autoAlpha: 1 });
+      gsap.set([...posters, ...head, lede], { autoAlpha: 1 });
 
       const reduced = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
 
+      const seen = (el: Element | null, ratio: number) =>
+        !el || el.getBoundingClientRect().top < window.innerHeight * ratio;
+      const at = (el: Element | null, ratio: number) =>
+        seen(el, ratio)
+          ? undefined
+          : { trigger: el as Element, start: `top ${ratio * 100}%`, once: true };
+
       if (!reduced) {
-        gsap.from(head, {
+        gsap.from([lede, ...head], {
           autoAlpha: 0,
           y: 14,
           duration: 0.9,
           stagger: 0.08,
           ease: "power2.out",
-          scrollTrigger: { trigger: root.current, start: "top 72%", once: true },
+          scrollTrigger: at(root.current, 0.75),
         });
 
-        rows.forEach((row) => {
-          const rule = row.querySelector(".row-rule");
-          const inner = row.querySelector(".work-link");
-          gsap
-            .timeline({
-              scrollTrigger: { trigger: row, start: "top 88%", once: true },
-            })
-            .from(rule, { scaleX: 0, duration: 1.1, ease: "expo.out" })
-            .from(
-              inner,
-              { autoAlpha: 0, y: 26, duration: 1, ease: "power3.out" },
-              0.08,
-            );
+        // The posters deal in like a hand of cards.
+        gsap.from(cells, {
+          autoAlpha: 0,
+          y: 48,
+          duration: 1.1,
+          stagger: 0.09,
+          ease: "power3.out",
+          scrollTrigger: at(strip, 0.88),
         });
       }
 
-      // Desktop only: a card of the project follows the pointer.
-      const card = preview.current;
-      if (!card || !window.matchMedia("(pointer: fine)").matches) return;
-
-      const xTo = gsap.quickTo(card, "x", { duration: 0.55, ease: "power3" });
-      const yTo = gsap.quickTo(card, "y", { duration: 0.55, ease: "power3" });
-
-      const onMove = (e: PointerEvent) => {
-        xTo(e.clientX);
-        yTo(e.clientY);
+      // Each poster draws its line work on the way in, and again on hover.
+      const drawn = new WeakSet<Element>();
+      const draw = (poster: Element) => {
+        if (reduced) return;
+        const lines = poster.querySelectorAll(".motif path, .motif circle");
+        if (!lines.length) return;
+        gsap.fromTo(
+          lines,
+          { drawSVG: "0%" },
+          { drawSVG: "100%", duration: 1, ease: "power2.out", stagger: 0.03 },
+        );
       };
 
-      window.addEventListener("pointermove", onMove, { passive: true });
-      return () => window.removeEventListener("pointermove", onMove);
-    },
-    { scope: root },
-  );
-
-  // Fade the card with the hovered row, and draw its motif each time.
-  useGSAP(
-    () => {
-      const card = preview.current;
-      if (!card || !window.matchMedia("(pointer: fine)").matches) return;
-
-      const open = active !== null;
-      gsap.to(card, {
-        autoAlpha: open ? 1 : 0,
-        scale: open ? 1 : 0.94,
-        duration: 0.45,
-        ease: "power3.out",
+      posters.forEach((poster) => {
+        ScrollTrigger.create({
+          trigger: poster,
+          start: "top 88%",
+          once: true,
+          onEnter: () => {
+            drawn.add(poster);
+            draw(poster);
+          },
+        });
+        poster.addEventListener("pointerenter", () => {
+          if (drawn.has(poster)) draw(poster);
+        });
       });
 
-      if (!open) return;
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-      gsap.fromTo(
-        card.querySelectorAll(".motif path, .motif circle"),
-        { drawSVG: "0%" },
-        { drawSVG: "100%", duration: 0.9, ease: "power2.out", stagger: 0.035 },
-      );
     },
-    { dependencies: [active] },
+    { scope: root },
   );
 
   return (
@@ -107,79 +97,109 @@ export default function WorkIndex() {
       id="work"
       className="work"
       aria-label="Selected work"
-      data-ground="chalk"
+      data-ground="pitch"
     >
-      <div className="section-head">
-        <h2 className="eyebrow" data-micro data-anim>
-          <span className="eyebrow-rule" aria-hidden="true" />
-          Selected work
-        </h2>
-        <p className="section-note" data-micro data-anim>
-          Four builds — two front-end studies, one full-stack product, one in
-          progress.
-        </p>
-        <p className="section-count" data-micro data-anim>
-          ({String(PROJECTS.length).padStart(2, "0")})
-        </p>
-      </div>
+      <div className="work-inner">
+        <div className="work-rack">
+          <ul className="posters">
+            {PROJECTS.map((project, i) => (
+              <li key={project.slug} className="poster-cell">
+                {/* The card goes straight to the live site where there is
+                    one; the write-up is a second, quieter link under it.
+                    Spider-Man has no site yet, so its card opens the case. */}
+                <Link
+                  href={project.href ?? `/work/${project.slug}`}
+                  className="poster"
+                  /* Alternating grounds: a lit card, then a dark one. */
+                  data-tone={i % 2 === 0 ? "lit" : "dark"}
+                  data-anim
+                  {...(project.href
+                    ? { target: "_blank", rel: "noreferrer" }
+                    : {})}
+                >
+                  {/* Drop a screenshot at /public/work/<slug>.jpg and set
+                      `cover` on the project to use it; the others keep the
+                      gradient and the line drawing. */}
+                  {project.cover ? (
+                    <span
+                      className="poster-cover"
+                      aria-hidden="true"
+                      style={
+                        {
+                          "--cover": `url(${project.cover})`,
+                        } as React.CSSProperties
+                      }
+                    />
+                  ) : (
+                    <span className="poster-art" aria-hidden="true">
+                      <ProjectMotif motif={project.motif} />
+                    </span>
+                  )}
 
-      <ol className="work-list">
-        {PROJECTS.map((project, i) => (
-          <li
-            key={project.slug}
-            className="work-row"
-            onMouseEnter={() => setActive(i)}
-            onMouseLeave={() => setActive((cur) => (cur === i ? null : cur))}
-          >
-            <span className="row-rule" aria-hidden="true" />
-            <Link
-              href={`/work/${project.slug}`}
-              className="work-link"
-              data-anim
-            >
-              <span className="row-no">{project.no}</span>
+                  <span className="poster-top">
+                    <span>{project.status ?? project.scope}</span>
+                    <span className="poster-index">/{project.no}</span>
+                  </span>
 
-              <span className="row-main">
-                <h3 className="row-title">{project.title}</h3>
-                <span className="row-line">{project.line}</span>
-              </span>
+                  <span className="poster-foot">
+                    <h3 className="poster-title">/{project.title}</h3>
+                    <p className="poster-note">{project.line}</p>
 
-              <span className="row-meta">
-                <span className="row-scope">
-                  {project.scope}
-                  {project.status ? ` — ${project.status}` : ""}
-                </span>
-                <span className="row-stack">{project.stack.join(" · ")}</span>
-              </span>
+                    {/* Held back until the card is hovered or focused. */}
+                    <span className="poster-more">
+                      <span className="poster-open">
+                        {project.href ? "Visit" : "Coming soon"}
+                        {project.href ? (
+                          <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            focusable="false"
+                          >
+                            <path
+                              d="M6 18L18 6M9 6h9v9"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        ) : null}
+                      </span>
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-              <span className="row-year">{project.year}</span>
+        </div>
 
-              <span className="row-arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false">
-                  <path
-                    d="M6 18L18 6M9 6h9v9"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ol>
+        {/* The reading for the rack sits beside it rather than above it. */}
+        <div className="work-aside">
+          <h2 className="eyebrow" data-micro data-anim>
+            <span className="eyebrow-rule" aria-hidden="true" />
+            Selected work
+          </h2>
 
-      <div ref={preview} className="work-preview" aria-hidden="true">
-        {active !== null ? (
-          <>
-            <ProjectMotif motif={PROJECTS[active].motif} />
-            <span className="preview-label">
-              {PROJECTS[active].scope} — {PROJECTS[active].year}
-            </span>
-          </>
-        ) : null}
+          <p className="work-lede" data-anim>
+            This is the work.
+          </p>
+
+          <p className="section-aside" data-micro data-anim>
+            Four builds, each one made end to end — the interface, the motion
+            and the code underneath it. Two front-end studies, one full-stack
+            product, one still in progress.
+          </p>
+
+          <p className="section-aside" data-micro data-anim>
+            Open one and its drawing is made on the spot, line by line.
+          </p>
+
+          <p className="section-count" data-micro data-anim>
+            ({String(PROJECTS.length).padStart(2, "0")})
+          </p>
+        </div>
       </div>
     </section>
   );

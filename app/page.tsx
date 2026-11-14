@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Hero from "@/components/Hero";
-import Statement from "@/components/Statement";
+import About from "@/components/About";
 import WorkIndex from "@/components/WorkIndex";
 import Contact from "@/components/Contact";
 
@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <Statement />
+      <About />
       <WorkIndex />
       <Contact />
     </main>

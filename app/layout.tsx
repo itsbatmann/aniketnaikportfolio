@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
-import { Anton, Caveat, Bodoni_Moda } from "next/font/google";
+import {
+  Aboreto,
+  Anton,
+  Caveat,
+  Bodoni_Moda,
+  Poppins,
+  Rochester,
+} from "next/font/google";
 import "./globals.css";
-import SiteNav from "@/components/SiteNav";
+import SmoothScroll from "@/components/SmoothScroll";
 import ScrollReset from "@/components/ScrollReset";
 import { SITE, SITE_URL, absoluteUrl } from "@/lib/site";
 
@@ -16,12 +23,37 @@ const display = Bodoni_Moda({
   display: "swap",
 });
 
+// The home lockup: the thin, wide-set display caps of the PORTFOLIO reference.
+const lockupFace = Aboreto({
+  variable: "--font-lockup",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
+// The signature sitting above it — a calligraphic script, as in the reference.
+const script = Rochester({
+  variable: "--font-script",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
 // The about lockup is a different register from the hero: a heavy condensed
 // grotesk, set tight, with the first name carrying the accent colour.
 const poster = Anton({
   variable: "--font-poster",
   subsets: ["latin"],
   weight: "400",
+  display: "swap",
+});
+
+// The about section's running text: the geometric grotesque of the reference —
+// single-storey `a`, circular bowls, tall x-height.
+const geo = Poppins({
+  variable: "--font-geo",
+  subsets: ["latin"],
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -43,7 +75,7 @@ export const metadata: Metadata = {
   // against the canonical origin — the same one the sitemap uses.
   metadataBase: new URL(SITE_URL),
   // NOTE: no `alternates.canonical` here. A canonical set on the root layout
-  // is inherited by every child route, which would point /about and all four
+  // is inherited by every child route, which would point all four
   // case pages at the home page and ask Google to drop them from the index.
   // Each page declares its own.
   title: {
@@ -101,7 +133,8 @@ const personLd = {
     description: SITE.description,
     address: {
       "@type": "PostalAddress",
-      addressCountry: SITE.locality,
+      addressLocality: SITE.locality,
+      addressCountry: SITE.country,
     },
     knowsAbout: [
       "UI design",
@@ -120,7 +153,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${display.variable} ${poster.variable} ${hand.variable} js-ready h-full antialiased`}
+      className={`${display.variable} ${lockupFace.variable} ${script.variable} ${poster.variable} ${geo.variable} ${hand.variable} js-ready h-full antialiased`}
     >
       <body className="min-h-full">
         {typekitId ? (
@@ -140,9 +173,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           // The payload is a literal defined above — no user input reaches it.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
+
+          
         />
         <ScrollReset />
-        <SiteNav />
+        <SmoothScroll />
         {children}
       </body>
     </html>

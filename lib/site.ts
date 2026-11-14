@@ -21,12 +21,24 @@ export const absoluteUrl = (path = "/") =>
  * name/role that differs between the two as a weaker signal, so they are not
  * written out twice.
  */
+/* ── YOUR DETAILS ──────────────────────────────────────────────────────
+ * These three are the only placeholders left on the site. Paste the real
+ * ones here and everything picks them up: the links in the footer, the
+ * mailto, and the `sameAs` profiles in the structured data that tell Google
+ * these accounts are the same person.
+ */
+const LINKEDIN = "https://linkedin.com/";
+const GITHUB = "https://github.com/";
+const EMAIL = "hello@aniketnaik.com";
+/* ──────────────────────────────────────────────────────────────────── */
+
 export const SITE = {
   name: "Aniket Naik",
   /** Used for `og:site_name` and the `title.template` suffix. */
   shortName: "Aniket Naik",
   role: "UI/UX designer and full-stack web developer",
-  locality: "India",
+  locality: "Mumbai",
+  country: "India",
   /**
    * The home page description. Written to read as a sentence a human would
    * click, not a keyword list — but it still carries the two terms someone
@@ -34,15 +46,13 @@ export const SITE = {
    * alongside the name, which is the query this site can realistically win.
    */
   description:
-    "Aniket Naik is a UI/UX designer and full-stack web developer in India, building interfaces, motion and the code underneath them with Next.js, React and GSAP.",
+    "Aniket Naik is a UI/UX designer and full-stack web developer in Mumbai, India, building interfaces, motion and the code underneath them with Next.js, React and GSAP.",
+  email: EMAIL,
+  linkedin: LINKEDIN,
+  github: GITHUB,
   /**
    * Profiles that corroborate the same person. `sameAs` is how a search engine
-   * links this site to an existing entity, so these must be the real accounts
-   * — the placeholders below are not yet.
+   * links this site to an existing entity, so these must be the real accounts.
    */
-  socials: [
-    "https://instagram.com/",
-    "https://linkedin.com/",
-    "https://github.com/",
-  ],
+  socials: [LINKEDIN, GITHUB],
 } as const;

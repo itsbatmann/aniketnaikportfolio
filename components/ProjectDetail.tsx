@@ -54,19 +54,34 @@ export default function ProjectDetail({
         delay: 0.25,
       });
 
+      // The drawing is made on the spot when the case opens — this is the
+      // panel the poster you clicked turns into.
       gsap.from(strokes, {
         drawSVG: "0%",
-        duration: 1.3,
+        duration: 1.4,
         ease: "power2.out",
-        stagger: 0.05,
-        scrollTrigger: { trigger: ".case-motif", start: "top 85%", once: true },
+        stagger: 0.07,
+        delay: 0.35,
+        onComplete: () => {
+          // Anything that should keep moving once it has been drawn: the
+          // café's smoke rises and falls on a loop.
+          gsap.to(q(".case-motif .smoke"), {
+            y: -7,
+            opacity: 0.35,
+            duration: 1.9,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+            stagger: 0.22,
+          });
+        },
       });
     },
     { scope: root },
   );
 
   return (
-    <article ref={root} className="case" data-ground="chalk">
+    <article ref={root} className="case" data-ground="paper">
       <Link href="/#work" className="nav-link case-back" data-micro data-anim>
         ← Work
       </Link>

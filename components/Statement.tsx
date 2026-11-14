@@ -57,7 +57,7 @@ export default function Statement() {
       ref={root}
       className="statement"
       aria-label="Approach"
-      data-ground="chalk"
+      data-ground="paper"
     >
       <h2 className="eyebrow" data-micro data-anim>
         <span className="eyebrow-rule" aria-hidden="true" />
