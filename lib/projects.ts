@@ -56,6 +56,7 @@ export const PROJECTS: Project[] = [
     year: "2025",
     status: "Coming soon",
     motif: "spider",
+    cover: "/work/spider-man.jpg",
     overview: [
       "A front-end only fan site: a comic-book subject handled with restraint. Webs are drawn as live SVG and animated stroke by stroke, so the page reads as line art rather than imagery.",
       "The point of the build was interaction detail — pointer-reactive artwork, staged entrances, and a palette held to two colours.",
@@ -96,6 +97,7 @@ export const PROJECTS: Project[] = [
     year: "2026",
     status: "In progress",
     motif: "cup",
+    cover: "/work/cafe.jpg",
     href: "https://work1-nine-lime.vercel.app/",
     overview: [
       "A warm, quiet site for a café: menu, hours, story and a booking surface. The front end is built and standing on its own.",

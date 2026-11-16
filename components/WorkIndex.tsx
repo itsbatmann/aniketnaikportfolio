@@ -110,8 +110,11 @@ export default function WorkIndex() {
                 <Link
                   href={project.href ?? `/work/${project.slug}`}
                   className="poster"
-                  /* Alternating grounds: a lit card, then a dark one. */
-                  data-tone={i % 2 === 0 ? "lit" : "dark"}
+                  /* As in the reference: a lit card, a photograph, a lit
+                     card, a photograph. */
+                  data-tone={
+                    project.cover ? "photo" : i === 0 ? "lit" : "lit-b"
+                  }
                   data-anim
                   {...(project.href
                     ? { target: "_blank", rel: "noreferrer" }
