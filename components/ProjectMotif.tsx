@@ -58,20 +58,6 @@ export default function ProjectMotif({
         </g>
       ) : null}
 
-      {motif === "spider" ? (
-        <g>
-          {/* The mask: an outline, two eyes, and the web over it. */}
-          <path d="M60 6c18 0 29 14 29 31 0 21-17 37-29 37S31 58 31 37C31 20 42 6 60 6z" />
-          <path d="M37 35c4-10 17-11 21-1-6 8-17 9-21 1z" />
-          <path d="M83 35c-4-10-17-11-21-1 6 8 17 9 21 1z" />
-          <path d="M60 7v67" />
-          <path d="M60 8 38 27M60 8l22 19M60 73 39 54M60 73l21-19" />
-          <path d="M35 23c15-6 35-6 50 0" />
-          <path d="M32 48c17-7 39-7 56 0" />
-          <path d="M38 62c13-5 31-5 44 0" />
-        </g>
-      ) : null}
-
       {motif === "cup" ? (
         <g>
           <circle cx="56" cy="44" r="24" />

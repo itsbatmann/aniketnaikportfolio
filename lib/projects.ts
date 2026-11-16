@@ -1,4 +1,4 @@
-export type Motif = "car" | "web" | "grid" | "cup" | "spider";
+export type Motif = "car" | "web" | "grid" | "cup";
 
 export type Project = {
   slug: string;
@@ -55,7 +55,7 @@ export const PROJECTS: Project[] = [
     stack: ["React", "GSAP", "SVG"],
     year: "2025",
     status: "Coming soon",
-    motif: "spider",
+    motif: "web",
     cover: "/work/spider-man.jpg",
     overview: [
       "A front-end only fan site: a comic-book subject handled with restraint. Webs are drawn as live SVG and animated stroke by stroke, so the page reads as line art rather than imagery.",

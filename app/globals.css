@@ -32,6 +32,17 @@
     cursive;
 }
 
+/* ── Breakpoints beyond Tailwind's 2xl ──────────────────────────────────
+   3xl: 1080p displays. 4xl: 2560-wide displays. 5xl: 4K. Declared in rem
+   like Tailwind's own, so the `3xl:` / `4xl:` / `5xl:` utilities sort in
+   order; a media query's rem is the browser default, so the root-size
+   scaling below does not shift them. */
+@theme {
+  --breakpoint-3xl: 120rem;
+  --breakpoint-4xl: 160rem;
+  --breakpoint-5xl: 240rem;
+}
+
 @theme inline {
   --color-paper: var(--paper);
   --color-wine: var(--wine);
@@ -1120,7 +1131,10 @@ body {
   margin: 0;
   font-family: var(--font-lockup-face);
   font-weight: 400;
-  font-size: clamp(2.5rem, 8.5vw, 7rem);
+  /* One line at every width, sized to the viewport so it keeps its share
+     of the section from a laptop to a 4K display. */
+  white-space: nowrap;
+  font-size: max(2.5rem, 7vw);
   line-height: 0.95;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -1323,5 +1337,51 @@ body {
     right: auto;
     left: 50%;
     translate: -50% 0;
+  }
+}
+
+/* ── Large displays ───────────────────────────────────────────────────── */
+
+/* Every size on the site is set in rem or vw, with clamp() caps in rem. The
+   caps are what stop the page growing with a big display, so on each of the
+   large breakpoints the root size steps up and the whole page scales with
+   it — the same proportions on a 1080p, a 2560 and a 4K display as on a
+   laptop. Lines that are set in pixels on purpose (hairlines, the drawn
+   strokes) take a step of their own so they do not thin to nothing. */
+/* From lg up the root size follows the viewport, with 2xl (1536px) as the
+   16px reference — so a 1080p, a 2560 and a 4K display all show exactly the
+   2xl composition, just larger, and a 1024 laptop shows it smaller. The 14px
+   floor keeps running text readable on the smallest desktops. */
+@media (min-width: 1024px) {
+  html {
+    font-size: max(14px, calc(100vw / 96));
+  }
+}
+
+@media (min-width: 2560px) {
+  .interlude-mandala .lines path,
+  .doodle .doodle-lines > *,
+  .motif {
+    stroke-width: 1.5px;
+  }
+}
+
+@media (min-width: 3840px) {
+  .interlude-mandala .lines path {
+    stroke-width: 2px;
+  }
+
+  .about-rule,
+  .contact-rule,
+  .eyebrow-rule,
+  .contact-foot,
+  .poster-meta {
+    border-top-width: 2px;
+  }
+
+  .about-rule,
+  .contact-rule,
+  .eyebrow-rule {
+    height: 2px;
   }
 }
