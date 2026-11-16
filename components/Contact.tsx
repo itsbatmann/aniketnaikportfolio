@@ -26,7 +26,9 @@ export default function Contact() {
       const thanks = q(".contact-thanks, .contact-rule");
       const rest = q("[data-micro]");
       const [figure] = q(".contact-doodle");
-      const figureLines = q(".contact-doodle .doodle-lines path, .contact-doodle .doodle-lines circle");
+      const figureLines = q(
+        ".contact-doodle .doodle-lines path, .contact-doodle .doodle-lines circle",
+      );
 
       gsap.set([...thanks, ...rest, figure], { autoAlpha: 1 });
 
@@ -86,8 +88,6 @@ export default function Contact() {
       aria-label="Contact"
       data-ground="plum"
     >
-      {/* Set in the same hand as the home lockup, so the page signs off the
-          way it opened. */}
       <div className="contact-sign">
         <h2 className="contact-thanks" data-anim>
           Thank you

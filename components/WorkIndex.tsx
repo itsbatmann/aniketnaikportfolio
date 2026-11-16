@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -102,24 +101,13 @@ export default function WorkIndex() {
       <div className="work-inner">
         <div className="work-rack">
           <ul className="posters">
-            {PROJECTS.map((project, i) => (
-              <li key={project.slug} className="poster-cell">
-                {/* The card goes straight to the live site where there is
-                    one; the write-up is a second, quieter link under it.
-                    Spider-Man has no site yet, so its card opens the case. */}
-                <Link
-                  href={project.href ?? `/work/${project.slug}`}
-                  className="poster"
-                  /* As in the reference: a lit card, a photograph, a lit
-                     card, a photograph. */
-                  data-tone={
-                    project.cover ? "photo" : i === 0 ? "lit" : "lit-b"
-                  }
-                  data-anim
-                  {...(project.href
-                    ? { target: "_blank", rel: "noreferrer" }
-                    : {})}
-                >
+            {PROJECTS.map((project, i) => {
+              /* As in the reference: a lit card, a photograph, a lit card,
+                 a photograph. */
+              const tone = project.cover ? "photo" : i === 0 ? "lit" : "lit-b";
+
+              const face = (
+                <>
                   {/* Drop a screenshot at /public/work/<slug>.jpg and set
                       `cover` on the project to use it; the others keep the
                       gradient and the line drawing. */}
@@ -151,7 +139,7 @@ export default function WorkIndex() {
                     {/* Held back until the card is hovered or focused. */}
                     <span className="poster-more">
                       <span className="poster-open">
-                        {project.href ? "Visit" : "Coming soon"}
+                        {project.href ? "Visit" : "In progress · coming soon"}
                         {project.href ? (
                           <svg
                             viewBox="0 0 24 24"
@@ -171,9 +159,38 @@ export default function WorkIndex() {
                       </span>
                     </span>
                   </span>
-                </Link>
-              </li>
-            ))}
+                </>
+              );
+
+              return (
+                <li key={project.slug} className="poster-cell">
+                  {project.href ? (
+                    /* The card is the live site, in a new tab. */
+                    <a
+                      href={project.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="poster"
+                      data-tone={tone}
+                      data-anim
+                    >
+                      {face}
+                    </a>
+                  ) : (
+                    /* No site yet: the card goes nowhere, and says so. */
+                    <div
+                      className="poster is-pending"
+                      role="group"
+                      aria-label={`${project.title} — in progress, coming soon`}
+                      data-tone={tone}
+                      data-anim
+                    >
+                      {face}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
 
         </div>

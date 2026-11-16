@@ -427,6 +427,12 @@ body {
   transform: translateY(-6px);
 }
 
+/* A card with no site yet is not a link: it still lifts and shows its
+   note on hover, but the cursor does not promise a page. */
+.poster.is-pending {
+  cursor: default;
+}
+
 /* The lit card: the glow sits high and burns off into the paper, as in the
    reference. */
 .poster[data-tone="lit"] {
@@ -716,6 +722,110 @@ body {
   margin-left: calc(var(--progress, 0) * (100% - var(--ratio, 1) * 100%));
 }
 
+/* ── Interlude ────────────────────────────────────────────────────────── */
+
+/* A few lines about the site, with the mandala printed onto the ground
+   beside them. The ink is lifted off its own paper — grayscale, contrast,
+   multiply — so what lands on the section is the drawing and nothing else,
+   cut by the right edge the way the source is. */
+.interlude {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  /* The text stands in from the gutter, in the middle of the room the
+     drawing leaves it, rather than hugging the left edge. */
+  grid-template-columns: minmax(0, 0.18fr) minmax(0, 38rem) minmax(0, 1.5fr);
+  align-items: center;
+  padding: clamp(5rem, 12vw, 10rem) var(--gutter);
+  overflow: hidden;
+}
+
+.interlude-mandala {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  /* The traced picture is already cut at the mandala's centre on its right
+     side, so set flush to the section's edge it is cut the same way; GSAP
+     centres it on its own height (yPercent). */
+  width: clamp(16rem, 32vw, 36rem);
+  color: var(--ink);
+  opacity: 0.86;
+  /* Thins the drawing away towards the text. */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.interlude-mandala svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* The outline the drawing is made with: one weight of line whatever the
+   size. It is only ever seen while the ink is still arriving. */
+.interlude-mandala .lines path {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1px;
+}
+
+/* The ink itself. Without JS it is simply there, solid. */
+.interlude-mandala .ink {
+  fill: currentColor;
+  /* potrace lays the holes down as contours of their own; they only read
+     as holes under even-odd. */
+  fill-rule: evenodd;
+  stroke: none;
+}
+
+.interlude-text {
+  grid-column: 2;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(1.1rem, 2.2vw, 1.75rem);
+  max-width: 38rem;
+}
+
+.interlude-lede {
+  margin: 0;
+  font-family: var(--font-lockup-face);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 5vw, 4.4rem);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.interlude-body {
+  margin: 0;
+  max-width: 44ch;
+  font-family: var(--font-geo), var(--font-micro);
+  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+  line-height: 1.6;
+}
+
+.interlude-note {
+  margin: 0;
+  max-width: 44ch;
+  font-family: var(--font-micro);
+  font-size: clamp(0.7rem, 0.9vw, 0.9rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.9;
+  opacity: 0.6;
+}
+
+.interlude-note-label {
+  display: inline-block;
+  margin-right: 1.1em;
+  padding-bottom: 0.1em;
+  border-bottom: 1px solid currentColor;
+  opacity: 0.8;
+}
+
 /* ── Contact ──────────────────────────────────────────────────────────── */
 
 /* The sign-off: the page closes in the same hand it opened with, the links
@@ -751,9 +861,16 @@ body {
   text-transform: uppercase;
 }
 
+.contact-sign,
+.contact-foot {
+  position: relative;
+  z-index: 1;
+}
+
 /* Stood off to one side of the sign-off, taking his time. */
 .contact-doodle {
   position: absolute;
+  z-index: 1;
   left: var(--gutter);
   bottom: clamp(5rem, 9vw, 7.5rem);
   width: clamp(7rem, 16vw, 15rem);
@@ -1145,6 +1262,29 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* The sign-off does not need a whole screen of plum above it on a phone. */
+  .contact {
+    min-height: 58svh;
+  }
+
+  /* On a phone the print gets a band of its own under the text, rising
+     out of the bottom edge, rather than running under the paragraph. */
+  .interlude {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    padding-bottom: clamp(13rem, 58vw, 19rem);
+  }
+
+  .interlude-text {
+    grid-column: 1;
+  }
+
+  .interlude-mandala {
+    width: clamp(13rem, 56vw, 18rem);
+    top: 100%;
+    opacity: 0.6;
+  }
+
   .poster {
     height: clamp(20rem, 52svh, 26rem);
   }
@@ -1172,6 +1312,7 @@ body {
 }
 
 @media (max-width: 760px) {
+
   .stack {
     width: min(86vw, 100%);
   }

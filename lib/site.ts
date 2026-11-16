@@ -27,9 +27,9 @@ export const absoluteUrl = (path = "/") =>
  * mailto, and the `sameAs` profiles in the structured data that tell Google
  * these accounts are the same person.
  */
-const LINKEDIN = "https://linkedin.com/";
-const GITHUB = "https://github.com/";
-const EMAIL = "hello@aniketnaik.com";
+const LINKEDIN = "https://www.linkedin.com/in/aniket--naik/";
+const GITHUB = "https://github.com/itsbatmann";
+const EMAIL = "aniketttnaik@gmail.com";
 /* ──────────────────────────────────────────────────────────────────── */
 
 export const SITE = {
