@@ -207,9 +207,9 @@ export default function WorkIndex() {
           </p>
 
           <p className="section-aside" data-micro data-anim>
-            Four builds, each one made end to end — the interface, the motion
-            and the code underneath it. Two front-end studies, one full-stack
-            product, one still in progress.
+            Five builds, each one made end to end — the interface, the motion
+            and the code underneath it, from front-end studies to full-stack
+            products.
           </p>
 
           <p className="section-aside" data-micro data-anim>

@@ -1,4 +1,4 @@
-export type Motif = "car" | "web" | "grid" | "cup";
+export type Motif = "car" | "web" | "grid" | "cup" | "lamp";
 
 export type Project = {
   slug: string;
@@ -107,6 +107,26 @@ export const PROJECTS: Project[] = [
       "Menu and story pages complete",
       "Booking flow designed, front-end only",
       "Back-end integration in progress",
+    ],
+  },
+  {
+    slug: "lumora",
+    no: "05",
+    title: "Lumora",
+    line: "An online store for handcrafted lamps, built end to end.",
+    scope: "Full-stack",
+    stack: ["MongoDB", "Express.js", "React.js", "GSAP"],
+    year: "2026",
+    motif: "lamp",
+    href: "https://lamp-nine-alpha.vercel.app/",
+    overview: [
+      "A store for a maker of handcrafted lamps, built across the whole stack: a React front end over an Express API, with the catalogue kept in MongoDB.",
+      "The pieces are the point, so the motion is quiet — GSAP brings each one in and gets out of the way.",
+    ],
+    highlights: [
+      "MongoDB, Express and React, end to end",
+      "GSAP motion on the product pages",
+      "Live and deployed",
     ],
   },
 ];

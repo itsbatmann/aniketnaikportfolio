@@ -58,6 +58,16 @@ export default function ProjectMotif({
         </g>
       ) : null}
 
+      {motif === "lamp" ? (
+        <g>
+          {/* A table lamp: shade, stem, base, and the light falling from it. */}
+          <path d="M44 12h32l12 28H32Z" />
+          <path d="M60 40v24" />
+          <path d="M46 71c0-4 6-6 14-6s14 2 14 6Z" />
+          <path d="M28 47l-8 5M92 47l8 5M46 49l-4 8M74 49l4 8" />
+        </g>
+      ) : null}
+
       {motif === "cup" ? (
         <g>
           <circle cx="56" cy="44" r="24" />
